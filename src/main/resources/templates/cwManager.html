@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        body,
+        html {
+            height: 100%
+        }
+
+        a {
+            color: rgb(255, 255, 255);
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: rgb(128, 15, 204)
+        }
+
+        #my-app {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #my-app .header {
+            height: 50px;
+            background: #2dc3e8;
+            line-height: 50px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        #my-app .wrapper {
+            flex: 1;
+            display: flex;
+        }
+
+        #my-app .wrapper .sidebar {
+            width: 200px;
+            height: 100%;
+            background: #273240;
+        }
+
+        #my-app .wrapper .main {
+            flex: 1;
+            background: #f0f0f0;
+        }
+
+        #my-app .header .head-logo {
+            width: 200px;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        #my-app .header .head-setting {
+            height: 50px;
+            width: 80px;
+
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .div1 {
+            border: 1px solid #dbdbdb;
+            width: 235px;
+
+
+        }
+
+        .div1 ul li {
+
+            height: 40px;
+            line-height: 40px;
+            padding-left: 25px;
+
+        }
+
+        .div1 ul li a {
+            /* 解决了鼠标划过反馈的bug */
+            display: block;
+            font-size: 16px;
+            text-decoration: none;
+
+        }
+
+        .div2 {
+            display: none;
+        }
+
+        .div2 ul li {
+            border: 0px;
+            padding-left: 50px;
+        }
+
+
+
+        .div2 ul li a {
+            /* 解决了鼠标划过反馈的bug */
+            display: block;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .box{
+            width: 800px;
+            margin:20px 20px;
+
+        }
+        .photo{
+            display: block;
+            width: 160px;
+            height: 200px;
+            margin:20px 20px;
+
+        }
+    </style>
+</head>
+
+<body>
+<div id="my-app">
+    <header class="header">
+        <div class="head-logo fl">学生管理系统</div>
+        <div class="head-setting fr">
+            <a th:href="@{/login}">注销</a>
+        </div>
+    </header>
+    <section class="wrapper">
+        <aside class="sidebar div1">
+            <ul>
+                <li><a href="#">财务管理</a></li>
+                <div class="div2">
+                    <ul>
+                        <li class="basicSearch"><a href="#">缴费信息查询</a></li>
+                        <li class="paidfee"><a href="#">学生缴费</a></li>
+
+                    </ul>
+                </div>
+
+                <li><a href="#">缴费信息</a></li>
+                <div class="div2">
+                    <ul>
+
+                        <li class="unpaidfee"><a href="#">未缴费用查询</a></li>
+
+                    </ul>
+                </div>
+
+            </ul>
+        </aside>
+        <main class="main">
+
+            <!--<img class="photo fl" th:src="${student.photo}" alt="">-->
+            <!--<div class="box">-->
+            <!--姓名：<m th:text="${student.name}"></m>-->
+            <!--<br>-->
+            <!--学号：<m th:text="${student.studentId}"></m>-->
+            <!--<br>-->
+            <!--性别：<m th:text="${student.sex}"></m>-->
+            <!--<br>-->
+            <!--学院：<m th:text="${student.institute}"></m>-->
+            <!--<br>-->
+            <!--身份证：<m th:text="${student.id}"></m>-->
+
+            <!--</div>-->
+        </main>
+        <div style="display: none">
+            <m id="s_name" th:text="${student.name}"></m>
+            <m id="s_id" th:text="${student.id}"></m>
+            <m id="s_studentId" th:text="${student.studentId}"></m>
+            <m id="s_sex" th:text="${student.sex}"></m>
+            <m id="s_institute" th:text="${student.institute}"></m>
+            <m id="s_photo" th:text="${student.photo}"></m>
+
+
+        </div>
+    </section>
+</div>
+<!--<img src="/src/main/resources/JS/sao.jpg" alt="">-->
+<script th:src="@{/asserts/js/jquery-1.10.2.js}"></script>
+<script th:inline="javascript">
+
+
+        // var dd = document.getElementById('#my-app');
+        // console.log(dd)
+        // var student={
+        //     name:$('#s_name').innerHTML,
+        //     studentId:$('#s_studentId').innerHTML,
+        //     sex:$('#s_sex').innerHTML,
+        //     institute:$('#s_institute').innerHTML,
+        //     id:$('#s_id').innerHTML,
+        // }
+        // var index = $('#index').innerHTML;
+        var Obj =(function(){
+
+            var ObjProvite = (function(){
+                return{
+                    _setPara : function(options){
+                        this.bDiv = options.bDiv;
+                        this.aDivList = options.aDivList;
+                        this.mainDiv = options.mainDiv;
+                        this.searchLi = options.searchLi[0];
+                        this.student = options.student;
+                        this.feeQueryLi = $(this.bDiv).children().children('.paidfee')||null;
+
+                        this.unpaidFeeQueryLi = $(this.bDiv).children().children('.unpaidfee')||null;
+                        // this.feeList = options.feeList;
+                    }
+                }
+            })()
+
+
+            var Obj = function(options){
+                if (this instanceof Obj){
+                    ObjProvite._setPara.call(this, options);
+                    // ObjProvite._setPara(options); //这一句this指向有问题，上一句更正this指向
+                } else {
+                    return new Obj(options);
+                }
+            }
+
+            Obj.prototype = {
+                constructor: Obj,
+                install: function(){
+                    // console.log(this.feeQueryLi)
+                    // console.log(this.unpaidFeeQueryLi)
+                    this.bindShowClass();
+                    // console.log(this.student)
+                    // console.log(this.feeList)
+                    this.bindSearch();
+                    this.bindFeeQuery();
+                    this.bindUnpaidFeeQuery();
+
+
+                },
+
+                bindFeeQuery(){
+                    // console.log('aaaaa')
+                    _this=this
+                    this.feeQueryLi.on('click',function(){
+                        $.ajax({
+                            type: 'POST',
+                            url: '/nsms/paidfee',
+                            data: JSON.stringify({
+                                studentId: _this.student.studentId
+                            }),
+                            dataType: 'json',
+                            contentType: "application/json"
+                        }).done(function (data) {
+                            console.log(data)
+                            var s = '';
+                            _this.mainDiv.innerHTML = '';
+                            for (var i = 0; i < data.length; i++) {
+                                s = '            <div class="box">\n' +
+                                    '                费用描述：' + data[i].description +
+                                    '                <br>\n' +
+                                    '                所属学院：' + data[i].institute +
+                                    '                <br>\n' +
+                                    '                费用：' + data[i].money + '元' +
+                                    '            </div>';
+                                _this.mainDiv.innerHTML += s;
+                            }
+                        }).fail(function (err) {
+                            console.log('ddddd2')
+                        })
+                    })
+
+                },
+                bindUnpaidFeeQuery(){
+                    // console.log('aaaaa2')
+                    _this=this
+                    this.unpaidFeeQueryLi.on('click',function(){
+                        _this.showUnpaidFee(_this);
+                    })
+                },
+                showUnpaidFee(_this) {
+                    _this=this
+                    // console.log('bbbbb2')
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/nsms/unpaidfee',
+                        data: JSON.stringify({
+                            studentId: _this.student.studentId
+                        }),
+                        dataType: 'json',
+                        contentType: "application/json"
+                    }).done(function (data) {
+                        var s = '';
+                        _this.mainDiv.innerHTML = '';
+                        for (var i = 0; i < data.length; i++) {
+                            s = '            <div class="box">\n' +
+                                '                费用描述：' + data[i].description +
+                                '                <br>\n' +
+                                '                所属学院：' + data[i].institute +
+                                '                <br>\n' +
+                                '                费用：' + data[i].money + '元' +
+                                '            </div>';
+                            _this.mainDiv.innerHTML += s;
+
+                            var btn = document.createElement('button');
+                            btn.innerHTML = '缴费';
+                            btn.className = 'btn'+i;
+
+                            $(_this.mainDiv).append(btn);
+
+                        }
+                        _this.payfeeHandler(_this,data);
+
+                    }).fail(function (err) {
+                        console.log('ddddd2')
+                    })
+                },
+
+
+                payfeeHandler(_this,fees){
+                    _this.mainDiv.onclick = function (ev) {
+                        var target = ev.target;
+                        for(var i = 0 ; i < fees.length ; i++){
+                            if(ev.target.className == 'btn'+i){
+                                console.log(fees[i])
+                                console.log(_this.student)
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/nsms/payfee',
+                                    data: JSON.stringify({
+                                        studentId: _this.student.studentId,
+                                        feeId: fees[i].id
+                                    }),
+                                    dataType: 'json',
+                                    contentType: "application/json"
+                                }).done(function (data) {
+                                    alert('缴费成功');
+                                    _this.showUnpaidFee()
+
+                                }).fail(function (err) {
+                                    console.log('错啦')
+                                    console.log(err)
+                                })
+                            }
+                        }
+
+                    }
+
+
+
+                },
+                bindSearch(){
+                    _this=this;
+
+                    this.searchLi.onclick=function () {$.ajax({
+                        type: 'POST',
+                        url: '/nsms/paidfee',
+                        data: JSON.stringify({
+                            studentId: _this.student.studentId
+                        }),
+                        dataType: 'json',
+                        contentType: "application/json"
+                    }).done(function (data) {
+                        console.log(data)
+                        var s = '';
+                        _this.mainDiv.innerHTML = '';
+                        for (var i = 0; i < data.length; i++) {
+                            s = '            <div class="box">\n' +
+                                '                费用描述：' + data[i].description +
+                                '                <br>\n' +
+                                '                所属学院：' + data[i].institute +
+                                '                <br>\n' +
+                                '                费用：' + data[i].money + '元' +
+                                '            </div>';
+                            _this.mainDiv.innerHTML += s;
+                        }
+                    }).fail(function (err) {
+                        console.log('ddddd2')
+                    })
+                    }
+                },
+                cutClass: function (v){
+                    for(var i = 0 ;i<this.aDivList.length;i++){
+                        if(i!=v){
+                            this.bDiv[i].style.display = 'none';
+                        }
+
+                    }
+
+
+                },
+
+                bindShowClass:function(){
+
+                    var _this = this;
+                    for(var i = 0; i < this.aDivList.length  ; i++){
+                        this.aDivList[i].index = i;
+                        this.aDivList[i].onclick = function(){
+
+                            if(_this.bDiv[this.index].style.display == 'block'){
+
+                                _this.bDiv[this.index].style.display = 'none';
+                            }else{
+
+                                _this.bDiv[this.index].style.display ='block';
+
+                            }
+
+
+                            _this.cutClass(this.index);
+                        }
+                    }
+
+                },
+
+
+            }
+
+
+
+
+
+            return Obj;
+
+        })()
+
+        var student ={
+            name:document.getElementById('s_name').innerHTML,
+            id:document.getElementById('s_id').innerHTML,
+            studentId:document.getElementById('s_studentId').innerHTML,
+            sex:document.getElementById('s_sex').innerHTML,
+            institute:document.getElementById('s_institute').innerHTML,
+            photo:document.getElementById('s_photo').innerHTML
+        }
+
+        var index =1;
+        console.log(student)
+
+
+        var mainDiv = document.querySelectorAll('.main')[0]
+
+
+        var obj = Obj({
+            aDivList: document.querySelectorAll('.div1>ul>li'),
+            bDiv: document.querySelectorAll('.div2'),
+            mainDiv: mainDiv,
+            searchLi:document.querySelectorAll('.basicSearch'),
+            student:student
+            // feeList:[[${feeList}]]
+        });
+
+        obj.install();
+
+
+
+
+        // console.log(mainDiv)
+        // console.log(index);
+        if(index == 1){
+            // console.log('aaa')
+            var s = '欢迎你，' + student.name + ''
+            mainDiv.innerHTML = s;
+        }
+
+
+</script>
+
+</body>
+
+</html>
